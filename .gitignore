@@ -1,0 +1,6 @@
+.idea
+accounting-firm.iml
+config/autoload/local.php
+data/cache/*
+vendor/Zend/*
+module/Application
