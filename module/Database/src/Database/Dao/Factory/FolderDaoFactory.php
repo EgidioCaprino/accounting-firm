@@ -10,6 +10,9 @@ class FolderDaoFactory implements FactoryInterface {
     public function createService(ServiceLocatorInterface $serviceLocator) {
         $adapter = $serviceLocator->get('Zend\Db\Adapter\Adapter');
         $folder = $serviceLocator->get('Database\Model\Folder');
-        return new FolderDao("folder", $adapter, new RowGatewayFeature($folder));
+        $inputFilter = $serviceLocator->get('Database\InputFilter\FolderInputFilter');
+        $dao = new FolderDao("folder", $adapter, new RowGatewayFeature($folder));
+        $dao->setInputFilter($inputFilter);
+        return $dao;
     }
 }

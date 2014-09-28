@@ -28,7 +28,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Database\Model\User', $fetchedUser);
         $this->assertSame($data["username"], $fetchedUser->username);
         $this->assertSame($data["email"], $fetchedUser->email);
-        $this->assertEquals($data["admin"], $fetchedUser->admin);
+        $this->assertTrue($fetchedUser->admin);
 
         $fetchedUser->delete();
         $this->assertNull($dao->findById($user->id_user));

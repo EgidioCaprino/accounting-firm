@@ -26,4 +26,12 @@ abstract class AbstractModel extends RowGateway {
         $this->populate($inputFilter->getValues(), $this->rowExistsInDatabase());
         return parent::save();
     }
+
+    public function populate(array $rowData, $rowExistsInDatabase = false) {
+        $inputFilter = $this->getInputFilter();
+        $inputFilter->setData($rowData);
+        $inputFilter->isValid();
+        $rowData = $inputFilter->getValues();
+        return parent::populate($rowData, $rowExistsInDatabase);
+    }
 }

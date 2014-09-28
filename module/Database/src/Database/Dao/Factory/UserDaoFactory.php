@@ -10,7 +10,7 @@ class UserDaoFactory implements FactoryInterface {
     public function createService(ServiceLocatorInterface $serviceLocator) {
         $adapter = $serviceLocator->get('Zend\Db\Adapter\Adapter');
         $user = $serviceLocator->get('Database\Model\User');
-        $inputFilter = $serviceLocator->get('Database\InputFilter\Factory\UserInputFilterFactory');
+        $inputFilter = $serviceLocator->get('Database\InputFilter\UserInputFilter');
         $dao = new UserDao("user", $adapter, new RowGatewayFeature($user));
         $dao->setInputFilter($inputFilter);
         return $dao;

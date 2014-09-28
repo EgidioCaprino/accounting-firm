@@ -8,6 +8,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class FolderFactory implements FactoryInterface {
     public function createService(ServiceLocatorInterface $serviceLocator) {
         $adapter = $serviceLocator->get('Zend\Db\Adapter\Adapter');
-        return new Folder("id_folder", "folder", $adapter);
+        $inputFilter = $serviceLocator->get('Database\InputFilter\FolderInputFilter');
+        $folder = new Folder("id_folder", "folder", $adapter);
+        $folder->setInputFilter($inputFilter);
+        return $folder;
     }
 }

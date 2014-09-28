@@ -58,6 +58,7 @@ abstract class AbstractDao extends TableGateway {
             $result = $statement->execute();
             InputFilterUtils::assertDataIsValid($inputFilter, $result);
         } else {
+            $data = array_combine($insert->getRawState("columns"), $data);
             InputFilterUtils::assertDataIsValid($inputFilter, $data);
         }
         $insert->values($inputFilter->getValues());

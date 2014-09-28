@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <?php echo $this->headTitle("Accouting Firm")->setSeparator(" - ") ?>
+
+        <link href="<?php echo $this->basePath("/css/theme.css") ?>" rel="stylesheet">
+        <?php echo $this->headLink() ?>
+
+        <!--[if lt IE 9]>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <?php echo $this->headScript() ?>
+    </head>
+    <body>
+        <div class="container">
+            <?php echo $this->content ?>
+        </div>
+    </body>
+</html>

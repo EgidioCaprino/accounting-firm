@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class UserFactory implements FactoryInterface {
     public function createService(ServiceLocatorInterface $serviceLocator) {
         $adapter = $serviceLocator->get('Zend\Db\Adapter\Adapter');
-        $inputFilter = $serviceLocator->get('Database\InputFilter\Factory\UserInputFilterFactory');
+        $inputFilter = $serviceLocator->get('Database\InputFilter\UserInputFilter');
         $user = new User("id_user", "user", $adapter);
         $user->setInputFilter($inputFilter);
         return $user;

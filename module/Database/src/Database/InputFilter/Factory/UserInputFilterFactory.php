@@ -13,7 +13,8 @@ class UserInputFilterFactory implements FactoryInterface {
                 "name" => "id_user",
                 "required" => false,
                 "filters" => array(
-                    array("name" => "Digits")
+                    array("name" => "Digits"),
+                    array("name" => "Int")
                 )
             ),
             "username" => array(
@@ -36,6 +37,28 @@ class UserInputFilterFactory implements FactoryInterface {
                         "options" => array(
                             "deep" => true,
                             "mx" => true
+                        )
+                    )
+                )
+            ),
+            "password" => array(
+                "name" => "password",
+                "required" => true,
+                "filters" => array(
+                    array("name" => "StringTrim")
+                ),
+                "validators" => array(
+                    array(
+                        "name" => "StringLength",
+                        "options" => array(
+                            "min" => 64,
+                            "max" => 64
+                        )
+                    ),
+                    array(
+                        "name" => "Regex",
+                        "options" => array(
+                            "pattern" => "/^[0-9a-z]{64}$/i"
                         )
                     )
                 )

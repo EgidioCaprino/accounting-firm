@@ -3,4 +3,4 @@ accounting-firm.iml
 config/autoload/local.php
 data/cache/*
 vendor/Zend/*
-module/Application
+module/Application_old

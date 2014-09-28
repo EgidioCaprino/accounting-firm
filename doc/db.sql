@@ -16,12 +16,15 @@ CREATE TABLE `folder` (
 
 CREATE TABLE `file` (
   `id_file` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `id_folder` INT NOT NULL,
   `id_user` INT NOT NULL,
   `title` VARCHAR(255) NOT NULL,
   `filename` VARCHAR(255) NOT NULL,
+  `file_blob` LONGBLOB NOT NULL,
   `size` INT NOT NULL,
   `mime_type` VARCHAR(255) NOT NULL,
   `upload_date` DATETIME NOT NULL,
+  FOREIGN KEY (`id_folder`) REFERENCES `folder` (`id_folder`) ON UPDATE RESTRICT ON DELETE RESTRICT,
   FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
