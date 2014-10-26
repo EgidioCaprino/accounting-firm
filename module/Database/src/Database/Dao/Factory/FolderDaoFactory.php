@@ -13,6 +13,10 @@ class FolderDaoFactory implements FactoryInterface {
         $inputFilter = $serviceLocator->get('Database\InputFilter\FolderInputFilter');
         $dao = new FolderDao("folder", $adapter, new RowGatewayFeature($folder));
         $dao->setInputFilter($inputFilter);
+        $folderPermissionDao = $serviceLocator->get('Database\Dao\FolderPermissionDao');
+        $dao->setFolderPermissionDao($folderPermissionDao);
+        $fileDao = $serviceLocator->get('Database\Dao\FileDao');
+        $dao->setFileDao($fileDao);
         return $dao;
     }
 }

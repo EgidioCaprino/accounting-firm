@@ -1,0 +1,25 @@
+<form data-ng-submit="createUser()" name="form" novalidate="novalidate" role="form">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input class="form-control" data-ng-model="user.username" id="username" placeholder="Username" required="required" type="text">
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input class="form-control" data-ng-model="user.email" id="email" placeholder="Email" required="required" type="email">
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input class="form-control" data-ng-model="user.password" id="password" placeholder="Password" required="required" type="password">
+    </div>
+    <div class="form-group">
+        <label>Amministratore</label>
+        <label class="radio-inline">
+            <input data-ng-model="user.admin" data-ng-value="true" type="radio"> Si
+        </label>
+        <label class="radio-inline">
+            <input data-ng-model="user.admin" data-ng-value="false" type="radio"> No
+        </label>
+    </div>
+    <button class="btn btn-default" data-ng-disabled="form.$invalid || loading" type="submit">Crea</button>
+    <span class="fa fa-spin fa-spinner" data-ng-show="loading"></span>
+</form>

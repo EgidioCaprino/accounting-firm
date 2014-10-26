@@ -5,7 +5,8 @@ return array(
         "Database",
         "Utils",
         "Application",
-        "Authentication"
+        "Authentication",
+        "Rest"
     ),
     "module_listener_options" => array(
         "module_paths" => array(

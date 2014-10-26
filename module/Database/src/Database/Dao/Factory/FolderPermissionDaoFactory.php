@@ -2,6 +2,7 @@
 namespace Database\Dao\Factory;
 
 use Database\Dao\FolderPermissionDao;
+use Zend\Db\TableGateway\Feature\RowGatewayFeature;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

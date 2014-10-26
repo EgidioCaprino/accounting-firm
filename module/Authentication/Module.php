@@ -22,6 +22,11 @@ class Module {
             $controller = $event->getRouteMatch()->getParam("controller");
             $action = $event->getRouteMatch()->getParam("action");
 
+            // if action is null, then the request is directed to a rest resource
+            if ($action === null) {
+                $action = $event->getRequest()->getMethod();
+            }
+
             $acl = $event->getApplication()->getServiceManager()->get('Authentication\Acl\Acl');
             if (!$acl->isAllowed($role, $controller, $action)) {
                 $url = "/login";

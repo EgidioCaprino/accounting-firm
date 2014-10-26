@@ -1,6 +1,23 @@
 <?php $this->headTitle("Area riservata") ?>
+<!-- @todo Switch to minified version on production -->
+<?php $this->headScript()->appendFile('//cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/1.6.1/angular-file-upload-shim.min.js')
+                         ->appendFile("//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js")
+                         ->appendFile("//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-resource.js")
+                         ->appendFile("//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.js")
+                         ->appendFile('//cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/1.6.1/angular-file-upload.min.js')
+                         ->appendFile($this->basePath("/js/app/app.js"))
+                         ->appendFile($this->basePath("/js/app/router.js"))
+                         ->appendFile($this->basePath("/js/app/factory/user.js"))
+                         ->appendFile($this->basePath("/js/app/factory/folder.js"))
+                         ->appendFile($this->basePath("/js/app/factory/file.js"))
+                         ->appendFile($this->basePath("/js/app/factory/logged-user.js"))
+                         ->appendFile($this->basePath("/js/app/factory/folder-utils.js"))
+                         ->appendFile($this->basePath("/js/app/controller/user-list.js"))
+                         ->appendFile($this->basePath("/js/app/controller/create-user.js"))
+                         ->appendFile($this->basePath("/js/app/controller/folder.js"))
+                         ->appendFile($this->basePath("/js/app/controller/public-folder.js")) ?>
 
-<div class="row">
+<div class="row" data-ng-app="AccountingFirmModule">
     <div class="col-md-12">
         <nav class="navbar navbar-default" role="navigation">
             <div class="container-fluid">
@@ -16,11 +33,32 @@
                 <div class="collapse navbar-collapse" id="menu">
                     <ul class="nav navbar-nav">
                         <li>
+                            <a href="#/user/create">Crea utente</a>
+                        </li>
+                        <li>
+                            <a href="#/public-folder">Cartelle pubbliche</a>
+                        </li>
+                        <li>
                             <a href="/logout">Logout</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3" data-ng-controller="UserListController">
+            <ul class="nav nav-pills nav-stacked">
+                <li data-ng-repeat="user in users">
+                    <a data-ng-href="#/user/{{user.id_user}}/folder/0">
+                        <span class="glyphicon glyphicon-user"></span>
+                        {{user.username}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-9" data-ng-view=""></div>
     </div>
 </div>

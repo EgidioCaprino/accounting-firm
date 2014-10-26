@@ -3,10 +3,39 @@ return array(
     "service_manager" => array(
         "factories" => array(
             'Authentication\UsernameAndPasswordAuthenticationAdapter' => 'Authentication\Factory\UsernameAndPasswordAuthenticationAdapterFactory',
-            'Authentication\Session\AuthenticationSession' => '\Authentication\Session\Factory\AuthenticationSessionFactory'
+            'Authentication\Session\AuthenticationSession' => 'Authentication\Session\Factory\AuthenticationSessionFactory',
+            'Authentication\Acl\Acl' => 'Authentication\Factory\AclFactory'
         ),
-        "invokables" => array(
-            'Authentication\Acl\Acl' => 'Authentication\Acl\Acl'
+        "services" => array(
+            "permissions" => array(
+                'Authentication\Controller\LoginController' => array(
+                    "index" => array(\Authentication\Acl\Acl::ROLE_GUEST),
+                    "authenticate" => array(\Authentication\Acl\Acl::ROLE_GUEST)
+                ),
+                'Authentication\Controller\LogoutController' => array(
+                    "index" => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN)
+                ),
+                'Application\Controller\WebApplicationController' => array(
+                    "index" => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN)
+                ),
+                'Rest\Controller\UserRestController' => array(
+                    "logged-user" => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
+                    \Zend\Http\Request::METHOD_GET => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
+                    \Zend\Http\Request::METHOD_POST => array(\Authentication\Acl\Acl::ROLE_ADMIN),
+                    \Zend\Http\Request::METHOD_PUT => array(\Authentication\Acl\Acl::ROLE_ADMIN),
+                    \Zend\Http\Request::METHOD_DELETE => array(\Authentication\Acl\Acl::ROLE_ADMIN)
+                ),
+                'Rest\Controller\FolderRestController' => array(
+                    \Zend\Http\Request::METHOD_GET => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
+                    \Zend\Http\Request::METHOD_DELETE => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
+                    \Zend\Http\Request::METHOD_POST => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
+                ),
+                'Rest\Controller\FileRestController' => array(
+                    \Zend\Http\Request::METHOD_GET => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
+                    \Zend\Http\Request::METHOD_POST => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
+                    \Zend\Http\Request::METHOD_DELETE => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
+                )
+            )
         )
     ),
     "controllers" => array(
