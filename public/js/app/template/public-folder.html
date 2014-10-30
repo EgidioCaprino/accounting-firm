@@ -1,1 +1,38 @@
-<p>public folder</p>
+<div class="row">
+    <div class="col-md-11">
+        <ol class="breadcrumb">
+            <li class="active">
+                <a href="#/public-folder">
+                    Cartelle pubbliche
+                </a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-1" data-ng-if="user.admin">
+        <form class="form-inline" role="form">
+            <button class="btn btn-default" data-ng-click="createFolder()" type="button">
+                <span class="fa fa-plus-square"></span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped table-condensed">
+    <tbody>
+        <tr data-ng-repeat="folder in folders">
+            <td>
+                <span class="fa fa-folder"></span>
+            </td>
+            <td>
+                <a data-ng-href="#/public-folder/{{folder.id_folder}}">
+                    {{folder.name}}
+                </a>
+            </td>
+            <td data-ng-if="user.admin">
+                <a data-ng-click="deleteFolder(folder)">
+                    <span class="fa fa-trash"></span>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

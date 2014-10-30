@@ -10,6 +10,9 @@ class FolderPermissionDao extends AbstractDao {
     }
 
     public function isAllowed(User $user, Folder $folder) {
+        if ($user->admin) {
+            return true;
+        }
         $resultSet = $this->select(array(
             'id_user' => $user->id_user,
             'id_folder' => $folder->id_folder

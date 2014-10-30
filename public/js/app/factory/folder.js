@@ -5,6 +5,11 @@ app.factory("Folder", function($resource) {
     }, {
         update: {
             method: "PUT"
+        },
+        getPublicFolders: {
+            method: 'GET',
+            url: '/rest/public-folder',
+            isArray: true
         }
     });
 });

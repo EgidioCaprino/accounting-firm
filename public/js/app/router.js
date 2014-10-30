@@ -10,6 +10,9 @@ app.config(function($routeProvider) {
     }).when('/public-folder', {
         controller: 'PublicFolderController',
         templateUrl: basePath + '/public-folder.html'
+    }).when('/public-folder/:id_folder', {
+        controller: 'PublicFolderFileController',
+        templateUrl: basePath + '/public-folder-file.html'
     }).otherwise({
         redirectTo: "/user/create"
     });

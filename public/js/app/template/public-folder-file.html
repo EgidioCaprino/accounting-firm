@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-7">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#/public-folder">
+                    Cartelle pubbliche
+                </a>
+            </li>
+            <li class="active">
+                <a data-ng-href="#/public-folder/{{folder.id_folder}}">
+                    {{folder.name}}
+                </a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-md-3">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="fileUpload">Carica un file qui</label>
+                <input type="file" class="form-control" data-ng-disabled="uploadingProgress !== null" id="fileUpload" multiple="multiple" placeholder="Carica un file qui" required="required" data-ng-file-select="uploadFiles($files)">
+            </div>
+        </form>
+    </div>
+</div>
+<div class="progress" data-ng-if="uploadingProgress !== null">
+    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{uploadingProgress.percent}}" aria-valuemin="0" aria-valuemax="100" data-ng-style="uploadingProgress.style">
+        <span class="sr-only">{{uploadingProgress.percent}}%</span>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped table-condensed">
+    <tbody>
+        <tr data-ng-repeat="file in files">
+            <td>
+                <span class="fa fa-file"></span>
+            </td>
+            <td>
+                <a data-ng-href="/rest/user/{{user.id_user}}/folder/{{folder.id_folder}}/file/{{file.id_file}}" target="_blank">
+                    {{file.title}}
+                </a>
+            </td>
+            <td>
+                <a data-ng-click="deleteFile(file)">
+                    <span class="fa fa-trash"></span>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

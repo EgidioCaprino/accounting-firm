@@ -5,6 +5,7 @@ use Database\Dao\FolderDao;
 use Database\Model\Folder;
 use Utils\Database\DatabaseUtils;
 use Zend\Db\Adapter\Adapter;
+use Zend\Db\Sql\Select;
 use Zend\Debug\Debug;
 use Zend\InputFilter\InputFilter;
 use Zend\View\Model\JsonModel;
@@ -69,6 +70,25 @@ class FolderRestController extends AbstractRestController {
             'id_user' => $user->id_user
         ));
         return new JsonModel($folder->toArray());
+    }
+
+    public function get($folderId) {
+        $user = $this->getAuthSession()->getUser();
+        $folder = $this->getDao()->findById($folderId);
+        $folderPermissionDao = $this->getServiceLocator()->get('Database\Dao\FolderPermissionDao');
+        if ($folder->public || $folderPermissionDao->isAllowed($user, $folder)) {
+            return new JsonModel($folder->toArray());
+        }
+        return parent::get($folderId);
+    }
+
+    public function publicFoldersAction() {
+        $folderDao = $this->getDao();
+        $select = new Select($folderDao->getTable());
+        $select->where(array('public' => true));
+        $select->order('name ASC');
+        $folders = $folderDao->selectWith($select);
+        return new JsonModel(DatabaseUtils::resultSetToArray($folders));
     }
 
     /**

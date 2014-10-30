@@ -29,6 +29,7 @@ return array(
                     \Zend\Http\Request::METHOD_GET => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
                     \Zend\Http\Request::METHOD_DELETE => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
                     \Zend\Http\Request::METHOD_POST => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
+                    'public-folders' => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),
                 ),
                 'Rest\Controller\FileRestController' => array(
                     \Zend\Http\Request::METHOD_GET => array(\Authentication\Acl\Acl::ROLE_USER, \Authentication\Acl\Acl::ROLE_ADMIN),

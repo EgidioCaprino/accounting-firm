@@ -7,6 +7,7 @@ use Database\Model\File;
 use Database\Model\Folder;
 use Utils\Database\DatabaseUtils;
 use Zend\Db\Sql\Select;
+use Zend\Debug\Debug;
 use Zend\View\Model\JsonModel;
 
 class FileRestController extends AbstractRestController {
@@ -18,20 +19,6 @@ class FileRestController extends AbstractRestController {
         if (!$this->getServiceLocator()->get('Database\Dao\FolderPermissionDao')->isAllowed($user, $folder)) {
             return parent::getList();
         }
-//        $fileDao = $this->getDao();
-//        $select = new Select($fileDao->getTable());
-//        $select->columns(array(
-//            'id_file',
-//            'id_folder',
-//            'id_user',
-//            'title',
-//            'filename',
-//            'size',
-//            'mime_type',
-//            'upload_date'
-//        ))->where(array('id_folder' => $this->getFolder()->id_folder))
-//        ->order('title ASC');
-//        $files = $fileDao->selectWith($select);
         $filesArray = DatabaseUtils::resultSetToArray($this->getDao()->getFilesInFolder($folder));
         return new JsonModel($filesArray);
     }
@@ -68,6 +55,22 @@ class FileRestController extends AbstractRestController {
         }
         $file->delete();
         return new JsonModel($file->toArray());
+    }
+
+    public function get($fileId) {
+        $user = $this->getAuthSession()->getUser();
+        $file = $this->getDao()->findById($fileId);
+        $folder = $this->getServiceLocator()->get('Database\Dao\FolderDao')->findById($file->id_folder);
+        $allowed = $this->getServiceLocator()->get('Database\Dao\FolderPermissionDao')->isAllowed($user, $folder);
+        if (!$allowed) {
+            return parent::get($fileId);
+        }
+        $response = $this->getResponse();
+        $response->setContent($file->file_blob);
+        $response->getHeaders()->addHeaderLine('Content-Type', $file->mime_type)
+                               ->addHeaderLine('Content-Length', $file->size)
+                               ->addHeaderLine('Content-Disposition', 'inline; filename="' . $file->filename . '"');
+        return $response;
     }
 
     /**

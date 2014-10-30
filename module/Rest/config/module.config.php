@@ -67,6 +67,16 @@ return array(
                             )
                         )
                     ),
+                    'publicFolder' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/public-folder',
+                            'defaults' => array(
+                                'controller' => 'Rest\Controller\FolderRestController',
+                                'action' => 'public-folders'
+                            )
+                        )
+                    )
                 )
             )
         )
