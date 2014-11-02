@@ -41,7 +41,7 @@ app.factory('FolderUtils', function() {
         root: function(folders) {
             var root = null;
             folders.forEach(function(folder) {
-                if (folder.id_parent === null) {
+                if (!folder.public && folder.id_parent === null) {
                     if (root !== null) {
                         throw new Error("Found more then one root folder");
                     }

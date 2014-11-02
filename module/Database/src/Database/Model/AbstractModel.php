@@ -1,6 +1,7 @@
 <?php
 namespace Database\Model;
 
+use Utils\InputFilter\Exception\InvalidDataException;
 use Utils\InputFilter\InputFilterUtils;
 use Zend\Db\RowGateway\RowGateway;
 use Zend\InputFilter\InputFilterInterface;

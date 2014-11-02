@@ -38,6 +38,9 @@
                 </a>
             </td>
             <td>
+
+            </td>
+            <td>
                 <a data-ng-click="deleteFolder(folder)">
                     <span class="fa fa-trash"></span>
                 </a>
@@ -48,9 +51,12 @@
                 <span class="fa fa-file"></span>
             </td>
             <td>
-                <a>
+                <a data-ng-href="/rest/user/{{file.id_user}}/folder/{{file.id_folder}}/file/{{file.id_file}}" target="_blank">
                     {{file.title}}
                 </a>
+            </td>
+            <td>
+                {{DateUtils.sqlDateTimeToLocaleFormat(file.upload_date)}}
             </td>
             <td>
                 <a data-ng-click="deleteFile(file)">

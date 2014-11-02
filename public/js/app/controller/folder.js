@@ -1,4 +1,5 @@
-app.controller("FolderController", function($scope, $routeParams, Folder, File, FolderUtils, $upload) {
+app.controller("FolderController", function($scope, $routeParams, Folder, File, FolderUtils, DateUtils, $upload) {
+    $scope.DateUtils = DateUtils;
     $scope.folders = [];
     $scope.path = [];
     $scope.idUser = $routeParams.id_user;

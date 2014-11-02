@@ -1,6 +1,7 @@
 <?php
 namespace Rest\Controller;
 
+use Application\MailSender;
 use Database\Dao\FileDao;
 use Database\InputFilter\Factory\FileInputFilterFactory;
 use Database\Model\File;
@@ -16,7 +17,7 @@ class FileRestController extends AbstractRestController {
     public function getList() {
         $user = $this->getAuthSession()->getUser();
         $folder = $this->getFolder();
-        if (!$this->getServiceLocator()->get('Database\Dao\FolderPermissionDao')->isAllowed($user, $folder)) {
+        if (!$folder->public && !$this->getServiceLocator()->get('Database\Dao\FolderPermissionDao')->isAllowed($user, $folder)) {
             return parent::getList();
         }
         $filesArray = DatabaseUtils::resultSetToArray($this->getDao()->getFilesInFolder($folder));
@@ -26,7 +27,7 @@ class FileRestController extends AbstractRestController {
     public function create($data) {
         $folder = $this->getFolder();
         $user = $this->getAuthSession()->getUser();
-        if (!$this->getServiceLocator()->get('Database\Dao\FolderPermissionDao')->isAllowed($user, $folder)) {
+        if ((!$user->admin && $folder->public) || !$this->getServiceLocator()->get('Database\Dao\FolderPermissionDao')->isAllowed($user, $folder)) {
             return parent::getList();
         }
         $files = array();
@@ -43,6 +44,26 @@ class FileRestController extends AbstractRestController {
             $file->save();
             $files[] = $file->toArray();
         }
+        $to = array();
+        $userDao = $this->getServiceLocator()->get('Database\Dao\UserDao');
+        $admins = $userDao->select(array('admin' => true));
+        foreach ($admins as $admin) {
+            if ($admin->id_user !== $user->id_user && !in_array($admin->email, $to)) {
+                $to[] = $admin->email;
+            }
+        }
+        $permissionDao = $this->getServiceLocator()->get('Database\Dao\FolderPermissionDao');
+        $permissions = $permissionDao->select(array('id_folder' => $folder->id_folder));
+        foreach ($permissions as $permission) {
+            $user = $userDao->findById($permission->id_user);
+            if (!in_array($user->email, $to)) {
+                $to[] = $user->email;
+            }
+        }
+        if (!empty($to)) {
+            $loggedUser = $this->getAuthSession()->getUser();
+            MailSender::sendMail($to, 'Nuovo file caricato', sprintf("L'utente %s ha caricato un file nella cartella '%s'.", $loggedUser->username, $folder->name));
+        }
         return new JsonModel($files);
     }
 
@@ -51,7 +72,7 @@ class FileRestController extends AbstractRestController {
         $file = $this->getDao()->select(array('id_file' => $idFile))->current();
         $folder = $this->getServiceLocator()->get('Database\Dao\FolderDao')->select(array('id_folder' => $file->id_folder))->current();
         if (!$this->getServiceLocator()->get('Database\Dao\FolderPermissionDao')->isAllowed($user, $folder)) {
-            return parent::getList();
+            return parent::delete($idFile);
         }
         $file->delete();
         return new JsonModel($file->toArray());
@@ -61,7 +82,7 @@ class FileRestController extends AbstractRestController {
         $user = $this->getAuthSession()->getUser();
         $file = $this->getDao()->findById($fileId);
         $folder = $this->getServiceLocator()->get('Database\Dao\FolderDao')->findById($file->id_folder);
-        $allowed = $this->getServiceLocator()->get('Database\Dao\FolderPermissionDao')->isAllowed($user, $folder);
+        $allowed = $folder->public || $this->getServiceLocator()->get('Database\Dao\FolderPermissionDao')->isAllowed($user, $folder);
         if (!$allowed) {
             return parent::get($fileId);
         }

@@ -1,6 +1,8 @@
 <?php $this->headTitle("Area riservata") ?>
 <!-- @todo Switch to minified version on production -->
-<?php $this->headScript()->appendFile('//cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/1.6.1/angular-file-upload-shim.min.js')
+<?php $this->headScript()->appendFile('//cdnjs.cloudflare.com/ajax/libs/chance/0.5.6/chance.min.js')
+                         ->appendFile('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.min.js')
+                         ->appendFile('//cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/1.6.1/angular-file-upload-shim.min.js')
                          ->appendFile("//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js")
                          ->appendFile("//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-resource.js")
                          ->appendFile("//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.js")
@@ -12,11 +14,15 @@
                          ->appendFile($this->basePath("/js/app/factory/file.js"))
                          ->appendFile($this->basePath("/js/app/factory/logged-user.js"))
                          ->appendFile($this->basePath("/js/app/factory/folder-utils.js"))
+                         ->appendFile($this->basePath("/js/app/factory/date-utils.js"))
                          ->appendFile($this->basePath("/js/app/controller/user-list.js"))
                          ->appendFile($this->basePath("/js/app/controller/create-user.js"))
                          ->appendFile($this->basePath("/js/app/controller/folder.js"))
                          ->appendFile($this->basePath("/js/app/controller/public-folder.js"))
-                         ->appendFile($this->basePath("/js/app/controller/public-folder-file.js"))?>
+                         ->appendFile($this->basePath("/js/app/controller/public-folder-file.js"))
+                         ->appendFile($this->basePath("/js/app/controller/welcome.js"))
+                         ->appendFile($this->basePath("/js/app/controller/update-user.js"))
+                         ->appendFile($this->basePath("/js/app/init.js")) ?>
 
 <div class="row" data-ng-app="AccountingFirmModule">
     <div class="col-md-12">
@@ -34,6 +40,11 @@
                 <div class="collapse navbar-collapse" id="menu">
                     <ul class="nav navbar-nav">
                         <li>
+                            <a href="#/welcome">
+                                <span class="fa fa-home"></span>
+                            </a>
+                        </li>
+                        <li data-ng-if="user.admin">
                             <a href="#/user/create">Crea utente</a>
                         </li>
                         <li>
@@ -52,10 +63,18 @@
         <div class="col-md-3" data-ng-controller="UserListController">
             <ul class="nav nav-pills nav-stacked">
                 <li data-ng-repeat="user in users">
-                    <a data-ng-href="#/user/{{user.id_user}}/folder/0">
-                        <span class="glyphicon glyphicon-user"></span>
-                        {{user.username}}
-                    </a>
+                    <p>
+                        <a data-ng-href="#/user/{{user.id_user}}/folder/0">
+                            <span class="glyphicon glyphicon-user"></span>
+                            {{user.username}}
+                        </a>
+                        <a class="pull-right" data-ng-href="#/user/{{user.id_user}}" data-ng-if="loggedUser.admin || user.id_user === loggedUser.id_user" title="Modifica utente">
+                            <span class="fa fa-pencil"></span>
+                        </a>
+                        <a class="pull-right" data-ng-click="deleteUser(user)" data-ng-if="user.id_user !== loggedUser.id_user" title="Cancella utente">
+                            <span class="fa fa-trash"></span>
+                        </a>
+                    </p>
                 </li>
             </ul>
         </div>

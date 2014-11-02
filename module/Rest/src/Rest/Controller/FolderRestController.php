@@ -1,7 +1,9 @@
 <?php
 namespace Rest\Controller;
 
+use Application\MailSender;
 use Database\Dao\FolderDao;
+use Database\Dao\UserDao;
 use Database\Model\Folder;
 use Utils\Database\DatabaseUtils;
 use Zend\Db\Adapter\Adapter;
@@ -55,6 +57,7 @@ class FolderRestController extends AbstractRestController {
         $folderPermissionDao = $this->getServiceLocator()->get('Database\Dao\FolderPermissionDao');
         $folder = $this->createNewModel();
         $folder->populate($data);
+        $parentFolder = null;
         if (is_numeric($folder->id_parent)) {
             $parentFolder = $folderDao->select(array('id_folder' => $folder->id_parent))->current();
             if (!$folderPermissionDao->isAllowed($user, $parentFolder)) {
@@ -64,10 +67,14 @@ class FolderRestController extends AbstractRestController {
         if ($folder->public && !$user->admin) {
             return parent::create($data);
         }
+        $userId = $user->id_user;
+        if ($parentFolder !== null) {
+            $userId = $folderPermissionDao->select(array('id_folder' => $parentFolder->id_folder))->current()->id_user;
+        }
         $folder->save();
         $folderPermissionDao->insert(array(
             'id_folder' => $folder->id_folder,
-            'id_user' => $user->id_user
+            'id_user' => $userId
         ));
         return new JsonModel($folder->toArray());
     }

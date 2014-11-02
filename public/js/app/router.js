@@ -13,7 +13,13 @@ app.config(function($routeProvider) {
     }).when('/public-folder/:id_folder', {
         controller: 'PublicFolderFileController',
         templateUrl: basePath + '/public-folder-file.html'
+    }).when('/welcome', {
+        controller: 'WelcomeController',
+        templateUrl: basePath + '/welcome.html'
+    }).when('/user/:id_user', {
+        controller: 'UpdateUserController',
+        templateUrl: basePath + '/update-user.html'
     }).otherwise({
-        redirectTo: "/user/create"
+        redirectTo: "/welcome"
     });
 });
